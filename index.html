@@ -117,7 +117,13 @@
     }
 
     /* BOXES */
-    #screen-boxes { flex-direction: column; align-items: center; }
+    #screen-boxes {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
 
     .boxes-header { text-align: center; margin-bottom: 2rem; }
 
@@ -130,12 +136,29 @@
 
     .boxes-header p { color: rgba(255,200,215,0.55); font-size: 0.88rem; }
 
+    /* Responsive grid: 2 col on mobile, up to 4 on desktop */
     .boxes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
       width: 100%;
-      max-width: 860px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* 4 columns on larger screens */
+    @media (min-width: 768px) {
+      .boxes-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+      }
+    }
+
+    /* 3 columns on mid-size */
+    @media (min-width: 540px) and (max-width: 767px) {
+      .boxes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .box-card {
@@ -147,6 +170,9 @@
       cursor: pointer;
       transition: border-color 0.25s, background 0.25s, transform 0.2s;
       backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .box-card:hover {
@@ -165,9 +191,10 @@
 
     .box-card .box-lang {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #f9c8d9;
       margin-bottom: 0.3rem;
+      line-height: 1.4;
     }
 
     .box-card .box-label {
@@ -194,6 +221,7 @@
       letter-spacing: 0.06em;
       cursor: pointer;
       transition: background 0.2s;
+      margin-top: auto;
     }
 
     .btn-box svg { stroke: #f9c8d9; flex-shrink: 0; }
@@ -269,15 +297,25 @@
       margin: 1.25rem 0;
     }
 
-    @media (max-width: 480px) {
-      body { padding: 1rem; }
-      .password-card, .card-wrap { padding: 2rem 1.25rem; border-radius: 18px; }
-      .boxes-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-      .box-card { padding: 1.25rem 0.75rem; }
+    .made-by-el {
+      position: fixed;
+      bottom: 1rem;
+      right: 1.2rem;
+      font-size: 0.75rem;
+      color: rgba(255,200,215,0.3);
+      pointer-events: none;
+      letter-spacing: 0.05em;
     }
 
-    @media (max-width: 340px) {
-      .boxes-grid { grid-template-columns: 1fr; }
+    /* Small mobile adjustments */
+    @media (max-width: 400px) {
+      body { padding: 0.75rem; }
+      .password-card, .card-wrap { padding: 1.75rem 1rem; border-radius: 18px; }
+      .boxes-grid { gap: 0.65rem; }
+      .box-card { padding: 1.1rem 0.75rem; border-radius: 16px; }
+      .box-card .box-lang { font-size: 0.82rem; }
+      .box-card .box-label { font-size: 1rem; }
+      .btn-box { font-size: 0.75rem; padding: 0.55rem 0.75rem; }
     }
   </style>
 </head>
@@ -380,9 +418,7 @@
     <div class="card-wrap animate__animated animate__zoomIn" id="card-content"></div>
   </div>
 
-<div class="made-by-el">
-  Made by El
-</div>
+  <div class="made-by-el">Made by El</div>
 
   <script>
     const ICON_HEART = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
@@ -456,6 +492,7 @@
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
     }
   </script>
 </body>
