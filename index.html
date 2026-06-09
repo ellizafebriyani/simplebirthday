@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday Olivia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background-color: #1a0a12;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(180, 60, 100, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(200, 80, 130, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(150, 40, 80, 0.12) 0%, transparent 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .screen { display: none; width: 100%; }
+    .screen.active { display: flex; }
+
+    /* PASSWORD */
+    #screen-password { justify-content: center; align-items: center; }
+
+    .password-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,180,200,0.2);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .icon-wrap svg { stroke: #e07898; }
+
+    .password-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      color: #f9c8d9;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+
+    .password-card .subtitle {
+      color: rgba(255,200,215,0.6);
+      font-size: 0.85rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .pw-input {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,180,200,0.3);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      color: #f9c8d9;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 0.3em;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .pw-input::placeholder { letter-spacing: 0.1em; color: rgba(255,200,215,0.35); }
+    .pw-input:focus { border-color: rgba(240,120,160,0.7); }
+
+    .btn-primary {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #c1557a, #e07898);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary svg { stroke: white; flex-shrink: 0; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .error-msg {
+      color: #f9a8c0;
+      font-size: 0.82rem;
+      margin-top: 0.8rem;
+      min-height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* BOXES */
+    #screen-boxes { flex-direction: column; align-items: center; }
+
+    .boxes-header { text-align: center; margin-bottom: 2rem; }
+
+    .boxes-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      color: #f9c8d9;
+      margin-bottom: 0.4rem;
+    }
+
+    .boxes-header p { color: rgba(255,200,215,0.55); font-size: 0.88rem; }
+
+    .boxes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .box-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,180,200,0.18);
+      border-radius: 20px;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    .box-card:hover {
+      border-color: rgba(240,120,160,0.5);
+      background: rgba(255,255,255,0.07);
+      transform: translateY(-3px);
+    }
+
+    .box-card .box-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .box-card .box-icon svg { stroke: #e07898; }
+
+    .box-card .box-lang {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: #f9c8d9;
+      margin-bottom: 0.3rem;
+    }
+
+    .box-card .box-label {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e07898;
+      margin-bottom: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(193,85,122,0.3);
+      border: 1px solid rgba(240,120,160,0.4);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      color: #f9c8d9;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-box svg { stroke: #f9c8d9; flex-shrink: 0; }
+    .btn-box:hover { background: rgba(193,85,122,0.55); }
+
+    /* CARD VIEW */
+    #screen-card { justify-content: center; align-items: center; }
+
+    .card-wrap {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,180,200,0.2);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-front-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      color: #f9c8d9;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-front-sub {
+      color: rgba(255,200,215,0.6);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-icons svg { stroke: #e07898; }
+
+    .card-message {
+      font-size: clamp(0.9rem, 2.8vw, 1rem);
+      color: #f5d0dc;
+      line-height: 1.85;
+      text-align: left;
+      margin-bottom: 1.75rem;
+    }
+
+    .btn-back {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,180,200,0.25);
+      border-radius: 12px;
+      padding: 0.85rem;
+      color: #f9c8d9;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-back svg { stroke: #f9c8d9; flex-shrink: 0; }
+    .btn-back:hover { background: rgba(255,255,255,0.12); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,180,200,0.12);
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 1rem; }
+      .password-card, .card-wrap { padding: 2rem 1.25rem; border-radius: 18px; }
+      .boxes-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+      .box-card { padding: 1.25rem 0.75rem; }
+    }
+
+    @media (max-width: 340px) {
+      .boxes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCREEN 1: PASSWORD -->
+  <div id="screen-password" class="screen active animate__animated animate__fadeIn">
+    <div class="password-card">
+      <div class="icon-wrap">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </svg>
+      </div>
+      <h1>Hey Olivia, I have something special for you</h1>
+      <p class="subtitle">Enter the secret password to unlock your gift</p>
+      <input
+        type="password"
+        id="password"
+        class="pw-input"
+        placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+        onkeydown="if(event.key==='Enter') checkPassword()"
+      />
+      <button class="btn-primary" onclick="checkPassword()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Open My Gift
+      </button>
+      <p class="error-msg" id="error-msg"></p>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: BOXES -->
+  <div id="screen-boxes" class="screen">
+    <div class="boxes-header animate__animated animate__fadeInDown">
+      <h1>Happy Birthday, Olivia</h1>
+      <p>Four little boxes, all for you, open them in any order</p>
+    </div>
+    <div class="boxes-grid">
+
+      <div class="box-card animate__animated animate__fadeInUp" style="animation-delay:0.1s" onclick="openCard(1)">
+        <div class="box-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </div>
+        <p class="box-lang">Happy Birthday!</p>
+        <p class="box-label">BOX 1</p>
+        <button class="btn-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          TAP HERE
+        </button>
+      </div>
+
+      <div class="box-card animate__animated animate__fadeInUp" style="animation-delay:0.2s" onclick="openCard(2)">
+        <div class="box-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </div>
+        <p class="box-lang">생일 축하합니다!</p>
+        <p class="box-label">BOX 2</p>
+        <button class="btn-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          TAP HERE
+        </button>
+      </div>
+
+      <div class="box-card animate__animated animate__fadeInUp" style="animation-delay:0.3s" onclick="openCard(3)">
+        <div class="box-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </div>
+        <p class="box-lang">お誕生日おめでとう！</p>
+        <p class="box-label">BOX 3</p>
+        <button class="btn-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          TAP HERE
+        </button>
+      </div>
+
+      <div class="box-card animate__animated animate__fadeInUp" style="animation-delay:0.4s" onclick="openCard(4)">
+        <div class="box-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+        </div>
+        <p class="box-lang">!عيد ميلاد سعيد</p>
+        <p class="box-label">BOX 4</p>
+        <button class="btn-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          TAP HERE
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCREEN 3: CARD -->
+  <div id="screen-card" class="screen">
+    <div class="card-wrap animate__animated animate__zoomIn" id="card-content"></div>
+  </div>
+
+<div class="made-by-el">
+  Made by El
+</div>
+
+  <script>
+    const ICON_HEART = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+    const ICON_STAR  = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    const ICON_GLOBE = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+    const ICON_MUSIC = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
+    const ICON_CAKE  = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07898" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2 1 2 1"/><line x1="2" y1="21" x2="22" y2="21"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h0"/><path d="M12 4h0"/><path d="M17 4h0"/></svg>`;
+    const ICON_BACK  = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
+
+    const cards = {
+      1: {
+        title: "Happy Birthday, Olivia",
+        sub: "Box 1 — A message from the heart",
+        icons: ICON_HEART + ICON_STAR + ICON_HEART,
+        message: `Olivia, I wish you all the happiness, success, and love in the world. Thank you for being one of the best friends I could ever ask for the kind who makes even ordinary days feel special. Here's to you and everything amazing that's coming your way.`
+      },
+      2: {
+        title: "생일 축하합니다",
+        sub: "Saengil Chukhahamnida — Box 2",
+        icons: ICON_STAR + ICON_CAKE + ICON_STAR,
+        message: `I hope your special day is filled with all the love, laughter, and good vibes you truly deserve, Olivia. You are such an amazing person, and I am so grateful for every memory we have shared together. Enjoy every single moment, let's make this year even more incredible than the last.`
+      },
+      3: {
+        title: "お誕生日おめでとう",
+        sub: "Otanjoubi Omedetou — Box 3",
+        icons: ICON_CAKE + ICON_MUSIC + ICON_CAKE,
+        message: `Olivia, I hope you are feeling extra wonderful today. Being a final-year student can be incredibly demanding, but I have no doubt you have got it all under control. Keep pushing forward, and remember to also take care of yourself along the way because you matter just as much as your goals do. God is with you every step.`
+      },
+      4: {
+        title: "عيد ميلاد سعيد",
+        sub: "Eid Milad Sa'eed — Box 4",
+        icons: ICON_GLOBE + ICON_STAR + ICON_GLOBE,
+        message: `Next year, I hope all four of us grow into even better versions of ourselves. Let's chase those big dreams, hit our goals, and make enough memories to last a lifetime. Who knows maybe we'll even travel somewhere amazing together and create stories we'll laugh about for years to come. Here's to us, Olivia. God bless you always.`
+      }
+    };
+
+    function checkPassword() {
+      const val = document.getElementById('password').value;
+      const err = document.getElementById('error-msg');
+      if (val === '24052004') {
+        showScreen('screen-boxes');
+        err.textContent = '';
+      } else {
+        err.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Wrong password — are you really Olivia?`;
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+      }
+    }
+
+    function openCard(num) {
+      const d = cards[num];
+      document.getElementById('card-content').innerHTML = `
+        <p class="card-front-title">${d.title}</p>
+        <p class="card-front-sub">${d.sub}</p>
+        <div class="card-icons">${d.icons}</div>
+        <hr class="divider" />
+        <p class="card-message">${d.message}</p>
+        <button class="btn-back" onclick="backToBoxes()">${ICON_BACK} Back to all boxes</button>
+      `;
+      showScreen('screen-card');
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#f9c8d9','#e07898','#c1557a','#fff0f5','#ffd6e7']
+      });
+    }
+
+    function backToBoxes() { showScreen('screen-boxes'); }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
