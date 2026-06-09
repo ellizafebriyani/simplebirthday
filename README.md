@@ -9,6 +9,6 @@ SIMPLE BIRTHDAY CARD USING A SINGLE CODING FILE
 
 
 
-This project is a simple interactive birthday card developed using HTML, CSS, and JavaScript in a single file. When users open the website, they are first prompted to enter a password to unlock the birthday surprise. After entering the correct password, the page presents an engaging birthday-themed experience with animations and interactive elements. The website features four gift boxes, each containing a unique heartfelt message that can be opened individually, creating a fun, personalized, and memorable digital birthday celebration for the recipient. 
+This project is a simple interactive birthday card developed using HTML, CSS, and JavaScript in a single file. When users open the website, they are first prompted to enter a password to unlock the birthday surprise. After entering the correct password, the page presents an engaging birthday themed experience with animations and interactive elements. The website features four gift boxes, each containing a unique heartfelt message that can be opened individually, creating a fun, personalized, and memorable digital birthday celebration for the recipient. 
 
 https://simplebirthday.vercel.app/
